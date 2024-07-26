@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import environ
 import os
 from pathlib import Path
+import pymongo
+from django.shortcuts import render
+from django.http import JsonResponse
+from pymongo import MongoClient
+import os
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,14 +86,39 @@ WSGI_APPLICATION = 'wcode.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': 'postgres',
+        'PORT': '5432',
+    },
 }
 
+# Connect to MongoDB
+MONGO_URI = os.getenv('MONGO_URI', 'mongodb://mongo:27017/chatdb')
+client = MongoClient(MONGO_URI)
+db = client.get_default_database()
+messages_collection = db['messages']
+
+def send_message(request):
+    if request.method == 'POST':
+        message_data = {
+            'sender': request.POST['sender'],
+            'receiver': request.POST['receiver'],
+            'message': request.POST['message'],
+            'timestamp': datetime.datetime.now()
+        }
+        messages_collection.insert_one(message_data)
+        return JsonResponse({'status': 'Message sent'})
+
+def get_messages(request, chat_id):
+    if request.method == 'GET':
+        messages = messages_collection.find({'chat_id': chat_id})
+        message_list = list(messages)
+        return JsonResponse({'messages': message_list})
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -138,13 +169,3 @@ REST_FRAMEWORK = {
     ]
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('MYSQL_DATABASE'),
-        'USER': env('MYSQL_USER'),
-        'PASSWORD': env('MYSQL_PASSWORD'),
-        'HOST': env('MYSQL_HOST'),
-        'PORT': env('MYSQL_PORT'),
-    }
-}
