@@ -7,6 +7,7 @@ services:
       - .env
     container_name: wcode
     # volumes:
+          # - .:/wcode/
     #     - ../wcode/secrets.json:/app/secrets.json
     # #   - ../django/django-local-efs:/var/www/django-local-efs
     ports:
