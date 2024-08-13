@@ -10,7 +10,7 @@ WORKDIR /app
 # RUN rm -rvf /usr/local/lib/python3.10/site-packages/pip-23.0.1.dist-info
 
 # Upgrade pip to a specific version
-# RUN pip install --upgrade
+RUN pip install --upgrade pip
 
 # Copy the requirements file into the container
 COPY wcode/requirements.txt .
@@ -31,7 +31,7 @@ RUN chown -R python:python /app
 USER python
 
 # Expose port 7000 for the wcode app
-EXPOSE 7000
+EXPOSE 8000
 
 # Start the application
 # CMD ["uwsgi", "--ini", "/app/uwsgi.ini"]
