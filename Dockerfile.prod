@@ -1,0 +1,39 @@
+###############
+# BASE IMAGE  #
+###############
+FROM python:3.11-slim AS BUILDER
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file into the container
+COPY wcode/requirements.txt requirements.txt
+
+# Create a virtual environment and install dependencies
+RUN python -m venv /app/venv \
+    && /app/venv/bin/pip install --upgrade pip \
+    && /app/venv/bin/pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY wcode /app
+
+################
+# FINAL IMAGE  #
+################
+FROM python:3.11-slim
+
+# Copy the virtual environment and application files from the builder stage
+COPY --from=BUILDER /app /app
+
+# Set the working directory
+WORKDIR /app
+
+# Set environment variables to use the virtual environment
+ENV PATH="/app/venv/bin:$PATH"
+
+# Remove unnecessary files to reduce image size
+RUN apt-get purge -y --auto-remove && \
+    rm -rf /var/lib/apt/lists/* /root/.cache /root/.local
+
+# Use the virtual environment's Python to run the application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
