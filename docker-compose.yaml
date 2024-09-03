@@ -2,12 +2,13 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     env_file:
       - .env
     container_name: wcode
-    # volumes:
-          # - .:/wcode/
+    restart: unless-stopped
+    volumes:
+          - ./wcode/:/app
     #     - ../wcode/secrets.json:/app/secrets.json
     # #   - ../django/django-local-efs:/var/www/django-local-efs
     ports:
