@@ -10,9 +10,10 @@ WORKDIR /app
 COPY wcode/requirements.txt requirements.txt
 
 # Create a virtual environment and install dependencies
-RUN python -m venv /app/venv \
-    && /app/venv/bin/pip install --upgrade pip \
-    && /app/venv/bin/pip install --no-cache-dir -r requirements.txt
+# RUN python -m venv /app/venv \
+#     && /app/venv/bin/pip install --upgrade pip \
+#     && /app/venv/bin/pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
 COPY wcode /app
@@ -23,8 +24,9 @@ COPY wcode /app
 FROM python:3.11-slim
 
 # Set environment variables to use the virtual environment
-ENV PATH="/app/venv/bin:$PATH"
-
+# ENV PATH="/app/venv/bin:$PATH"
+COPY --from=builder /app /app
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 # Install necessary packages and upgrade to patch vulnerabilities
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -52,10 +54,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /root/.cache /root/.local
 
 # Copy the virtual environment and application files from the builder stage
-COPY --from=builder /app /app
-
-# Ensure the latest pip is used and the application is run in the correct environment
-RUN /app/venv/bin/pip install --upgrade pip setuptools==70.0.0
+# COPY --from=builder /app /app
 
 # Set the working directory
 WORKDIR /app
