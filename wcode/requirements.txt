@@ -6,3 +6,4 @@ requests==2.32.3
 django-environ==0.11.2
 psycopg2-binary==2.9.9
 pymongo==4.8.0
+uWSGI==2.0.26
