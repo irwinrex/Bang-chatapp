@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 import re
+import uuid
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -36,6 +37,7 @@ class CustomUser(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
     password_history = models.JSONField(default=list, blank=True)  # To store password history
+    chatroomID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Unique ID for chat room
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'phone_number', 'age', 'sex']
