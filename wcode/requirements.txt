@@ -7,3 +7,9 @@ django-environ==0.11.2
 psycopg2-binary==2.9.9
 pymongo==4.8.0
 uWSGI==2.0.26
+uvicorn==0.30.6
+channels==4.1.0
+channels-redis==4.2.0
+redis==5.0.8
+websockets==13.0.1
+wsproto==1.2.0

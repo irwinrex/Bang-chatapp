@@ -30,7 +30,7 @@ COPY /wcode /app
 # change to the python user
 # USER python
 
-# Expose port 7000 for the wcode app
+# Expose port 8000 for the wcode app
 EXPOSE 8000
 
 # Start the application

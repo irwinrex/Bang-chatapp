@@ -1,11 +1,11 @@
 services:
-  api:
+  wsgi:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.wsgi
     env_file:
       - .env
-    container_name: wcode
+    container_name: wsgi
     restart: unless-stopped
     volumes:
           - ./wcode/:/app
@@ -17,6 +17,25 @@ services:
       - wcode
     depends_on:
       - postgres
+    
+  asgi:
+    build:
+      context: .
+      dockerfile: Dockerfile.asgi
+    env_file:
+      - .env
+    container_name: asgi
+    restart: unless-stopped
+    volumes:
+          - ./wcode/:/app
+    #     - ../wcode/secrets.json:/app/secrets.json
+    # #   - ../django/django-local-efs:/var/www/django-local-efs
+    ports:
+      - 8001:8001
+    networks:
+      - wcode
+    depends_on:
+      - redis
 
   postgres:
     image: postgres:16.3
@@ -40,9 +59,22 @@ services:
     networks:
       - wcode
 
+  redis:
+    image: redis:latest
+    container_name: redis_db
+    env_file:
+      - .env
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - wcode
+
 volumes:
   postgres_data:
   mongo_data:
+  redis_data:
 
 networks:
   wcode:
