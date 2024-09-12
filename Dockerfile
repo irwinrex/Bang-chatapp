@@ -22,13 +22,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY /wcode /app
 
 # create the app user
-RUN addgroup --system python && adduser --system --group python
-RUN chown -R python:python /app
+# RUN addgroup --system python && adduser --system --group python
+# RUN chown -R python:python /app
 
 #RUN python manage.py makemigrations && python manage.py migrate
 
 # change to the python user
-USER python
+# USER python
 
 # Expose port 7000 for the wcode app
 EXPOSE 8000
