@@ -60,10 +60,12 @@ services:
       - wcode
 
   redis:
-    image: redis:latest
+    image: redis:7.4.0
     container_name: redis_db
     env_file:
       - .env
+    command: >
+          --requirepass ${REDIS_PASSWORD}
     ports:
       - 6379:6379
     volumes:

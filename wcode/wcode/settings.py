@@ -209,9 +209,34 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('redis', 6379)],  # Assuming Redis is running on Docker
+            "hosts": [("redis://:w_password@redis:6379/0")],  # or use the Redis container hostname if using Docker
         },
     },
 }
 
 AUTH_USER_MODEL = 'account.CustomUser'  # Points to the correct app and model
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'channels': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+        },
+        'channels_redis': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}

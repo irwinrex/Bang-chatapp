@@ -1,1 +1,6 @@
 .scannerwork
+wcode/_*
+wcode/wcode/_*
+wcode/chat/_*
+wcode/account/_*
+wcode/account/migrations
