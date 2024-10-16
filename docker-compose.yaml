@@ -50,7 +50,7 @@ services:
       - wcode
     
   mongo:
-    image: mongo:latest
+    image: mongo:8.0
     container_name: mongo_db
     ports:
       - 27017:27017
@@ -74,15 +74,26 @@ services:
       - wcode
   
   pulsar:
-    image: apachepulsar/pulsar:2.10.0
-    container_name: pulsar
-    user: root
-    command: bin/pulsar standalone
+    image: apachepulsar/pulsar:3.3.0
+    command: /pulsar/bin/pulsar standalone
     ports:
-      - 6650:6650
-      - 8080:8080
-    volumes:
-      - pulsar_data:/pulsar/data
+      - "6650:6650"  # Pulsar broker port
+      - "8080:8080"  # Pulsar web service
+    networks:
+      - wcode
+
+  zookeeper:
+    image: zookeeper:3.7
+    ports:
+      - "2181:2181"
+    networks:
+      - wcode
+
+  bookkeeper:
+    image: apachepulsar/pulsar:3.3.0
+    command: /pulsar/bin/bookkeeper start
+    depends_on:
+      - zookeeper
     networks:
       - wcode
 

@@ -20,7 +20,7 @@ import os
 import datetime
 from datetime import timedelta
 from pulsar import Client
-
+from .channels import PulsarChannelLayer 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -214,11 +214,21 @@ pulsar_client = Client(PULSAR_SERVICE_URL)
 
 
 # Redis Channel Layer configuration
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [("redis://:w_password@redis:6379/0")],  # or use the Redis container hostname if using Docker
+#         },
+#     },
+# }
+
+# Pulsar Channel Layer configuration
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'BACKEND': 'wcode.channels.PulsarChannelLayer',
         'CONFIG': {
-            "hosts": [("redis://:w_password@redis:6379/0")],  # or use the Redis container hostname if using Docker
+            'hosts': PULSAR_SERVICE_URL,
         },
     },
 }
