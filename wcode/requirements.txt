@@ -13,3 +13,4 @@ channels-redis==4.2.0
 redis==5.0.8
 websockets==13.0.1
 wsproto==1.2.0
+pulsar-client==3.5.0

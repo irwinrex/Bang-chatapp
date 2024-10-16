@@ -19,6 +19,7 @@ from pymongo import MongoClient
 import os
 import datetime
 from datetime import timedelta
+from pulsar import Client
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -203,6 +204,14 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+# Pulsar settings
+PULSAR_SERVICE_URL = env('PULSAR_SERVICE_URL')
+PULSAR_ADMIN_URL = env('PULSAR_ADMIN_URL')
+
+pulsar_client = Client(PULSAR_SERVICE_URL)
+
+
 
 # Redis Channel Layer configuration
 CHANNEL_LAYERS = {

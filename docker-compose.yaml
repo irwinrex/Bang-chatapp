@@ -72,11 +72,25 @@ services:
       - redis_data:/data
     networks:
       - wcode
+  
+  pulsar:
+    image: apachepulsar/pulsar:2.10.0
+    container_name: pulsar
+    user: root
+    command: bin/pulsar standalone
+    ports:
+      - 6650:6650
+      - 8080:8080
+    volumes:
+      - pulsar_data:/pulsar/data
+    networks:
+      - wcode
 
 volumes:
   postgres_data:
   mongo_data:
   redis_data:
+  pulsar_data:
 
 networks:
   wcode:
