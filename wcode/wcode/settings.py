@@ -226,7 +226,7 @@ pulsar_client = Client(PULSAR_SERVICE_URL)
 # Pulsar Channel Layer configuration
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'wcode.channels.PulsarChannelLayer',
+        'BACKEND': 'chat.channels.PulsarChannelLayer',
         'CONFIG': {
             'hosts': PULSAR_SERVICE_URL,
         },
