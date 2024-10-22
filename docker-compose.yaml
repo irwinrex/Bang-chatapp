@@ -17,6 +17,8 @@ services:
       - wcode
     depends_on:
       - postgres
+      - pulsar
+      - redis
     
   asgi:
     build:
@@ -36,6 +38,8 @@ services:
       - wcode
     depends_on:
       - redis
+      - mongo
+      - pulsar
 
   postgres:
     image: postgres:16.3
@@ -75,17 +79,21 @@ services:
   
   pulsar:
     image: apachepulsar/pulsar:3.3.0
+    container_name: pulsar
     env_file:
       - .env
     command: /pulsar/bin/pulsar standalone
     ports:
       - "6650:6650"  # Pulsar broker port
       - "8080:8080"  # Pulsar web service
+    depends_on:
+      - zookeeper
     networks:
       - wcode
 
   zookeeper:
     image: zookeeper:3.7
+    container_name: zookeeper
     ports:
       - "2181:2181"
     networks:

@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('healthcheck/', views.health_check, name='health_check'),
     path('account/', include('account.urls')),
+    path('chat/', include('chat.urls')),
 ]
